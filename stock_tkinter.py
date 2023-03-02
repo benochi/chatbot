@@ -1,30 +1,40 @@
 import yfinance as yf
-import tkinter as tk
+import matplotlib.pyplot as plt
+from tkinter import *
 
-def retrieve_data():
-    ticker = e1.get()
-    data = yf.Ticker(ticker)
-    price = data.history(period='1d')['Close'][0]
-    e2.delete(0, tk.END)
-    e2.insert(0, str(price))
+# Define the function to retrieve the stock data and display the graph
+def get_stock_data():
+    # Get the stock symbol entered by the user
+    symbol = stock_symbol.get()
 
-root = tk.Tk()
-root.geometry('300x200')
-root.title('StockBot')
+    # Use yfinance to retrieve the stock data
+    stock = yf.Ticker(symbol)
+    data = stock.history(period="max")
 
-label1 = tk.Label(root, text='Enter ticker symbol:')
-label1.pack()
+    # Plot the closing price data as a line graph
+    plt.plot(data['Close'])
+    plt.title(symbol)
+    plt.xlabel('Date')
+    plt.ylabel('Price')
 
-e1 = tk.Entry(root)
-e1.pack()
+    # Display the graph in the Matplotlib window
+    plt.show()
 
-button = tk.Button(root, text='Get Price', command=retrieve_data)
-button.pack()
+# Create the main window
+root = Tk()
+root.title("Stock Bot")
 
-label2 = tk.Label(root, text='Price:')
-label2.pack()
+# Create a label for the stock symbol entry
+symbol_label = Label(root, text="Enter Stock Symbol:")
+symbol_label.pack()
 
-e2 = tk.Entry(root)
-e2.pack()
+# Create an entry for the stock symbol
+stock_symbol = Entry(root)
+stock_symbol.pack()
 
+# Create a button to retrieve the stock data and display the graph
+get_data_button = Button(root, text="Get Stock Data", command=get_stock_data)
+get_data_button.pack()
+
+# Run the main loop
 root.mainloop()
